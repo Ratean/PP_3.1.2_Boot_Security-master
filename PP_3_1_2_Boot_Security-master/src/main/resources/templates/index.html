@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Users table</title>
+</head>
+<body>
+<!--<form th:method="GET" th:action="@{/cars}">-->
+<!--    <label for="count">Number of cars in the table</label>-->
+<!--    <input name="count" type="number" id="count"/>-->
+<!--    <input type="submit" value="Show"/>-->
+<!--</form>-->
+<h2>Users table</h2>
+<table>
+    <thead>
+    <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Surname</th>
+        <th scope="col">Age</th>
+        <th scope="col">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user :${users}">
+        <td th:text="${user.getName()}"/>
+        <td th:text="${user.getSurname()}"/>
+        <td th:text="${user.getAge()}"/>
+        <td>
+            <button>
+                <a th:href="@{/users/{id}/update(id=${user.getId()})}" type="submit">Update</a>
+            </button>
+            <form th:method="DELETE" th:action="@{/users/{id}(id=${user.getId()})}">
+                <input type="submit" value="Delete"/>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<hr/>
+<a  href="users/new">Create new person</a>
+</body>
+</html>

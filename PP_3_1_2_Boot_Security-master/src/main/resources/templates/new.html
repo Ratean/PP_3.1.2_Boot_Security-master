@@ -1,15 +1,19 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Creat user</title>
 </head>
 <body>
-<form th:method="POST" th:action="@{/users}" th:object="${user}">
+<form th:method="POST" th:action="@{/admin/users}" th:object="${user}">
     <label for="name">Name</label>
     <input type="text" th:field="*{name}" id="name"/>
     <div style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</div>
+    <br/>
+    <label for="password">Password</label>
+    <input type="text" th:field="*{password}" id="password"/>
+    <div style="color: red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</div>
     <br/>
     <label for="surname">Surname</label>
     <input type="text" th:field="*{surname}" id="surname"/>
@@ -19,8 +23,18 @@
     <input type="text" th:field="*{age}" id="age"/>
     <div style="color: red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age error</div>
     <br/>
+    <label>
+        <select multiple="multiple" size="${roles.size()}" name="roleId" required>
+            <option disabled>Select roles</option>
+            <option th:each="role:${roles}"
+                    th:value="${role.getName()}"
+                    th:text="${role.getName()}"
+            ></option>
+        </select>
+    </label>
+    <br/>
     <input type="submit" value="Save"/>
 </form>
-<h2>Users table</h2>
+<p><a th:href="@{'/logout'}">Logout</a></p>
 </body>
 </html>

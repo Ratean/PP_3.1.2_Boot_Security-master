@@ -1,16 +1,11 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Users table</title>
 </head>
 <body>
-<!--<form th:method="GET" th:action="@{/cars}">-->
-<!--    <label for="count">Number of cars in the table</label>-->
-<!--    <input name="count" type="number" id="count"/>-->
-<!--    <input type="submit" value="Show"/>-->
-<!--</form>-->
 <h2>Users table</h2>
 <table>
     <thead>
@@ -28,9 +23,9 @@
         <td th:text="${user.getAge()}"/>
         <td>
             <button>
-                <a th:href="@{/users/{id}/update(id=${user.getId()})}" type="submit">Update</a>
+                <a th:href="@{/admin/users/{id}/update(id=${user.getId()})}" type="submit">Update</a>
             </button>
-            <form th:method="DELETE" th:action="@{/users/{id}(id=${user.getId()})}">
+            <form th:method="DELETE" th:action="@{/admin/users/{id}(id=${user.getId()})}">
                 <input type="submit" value="Delete"/>
             </form>
         </td>
@@ -39,5 +34,6 @@
 </table>
 <hr/>
 <a  href="users/new">Create new person</a>
+<p><a th:href="@{'/logout'}">Logout</a></p>
 </body>
 </html>

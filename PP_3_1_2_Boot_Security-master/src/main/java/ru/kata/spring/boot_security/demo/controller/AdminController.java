@@ -53,7 +53,7 @@ public class AdminController {
     @GetMapping("/{id}/update")
     public String updateUser(Model model, @PathVariable("id") int id) {
         User user = userService.getUser(id);
-        user.setPassword("**");
+        user.setPassword("*******");
 
         model.addAttribute("user", user);
         return "update";
@@ -65,10 +65,22 @@ public class AdminController {
         if (bindingResult.hasErrors()) {
             return "/update";
         }
-        List<Role> roles = getRoleList(roleName);
-        user.setRoles(roles);
-        user.setId(userService.findByUsername(user.getUsername()).getId());
-        userService.update(user);
+        User oldUser = userService.getUser(user.getId());
+
+        if (roleName == null) {
+            user.setRoles(oldUser.getRoles());
+        } else {
+            List<Role> roles = getRoleList(roleName);
+            user.setRoles(roles);
+        }
+
+        if (user.getPassword().equals("*******")) {
+            user.setPassword(oldUser.getPassword());
+            userService.update(user);
+        } else {
+            userService.save(user);
+        }
+
         return "redirect:/admin/users";
     }
 
@@ -87,6 +99,11 @@ public class AdminController {
     public String delete(@PathVariable("id") int id) {
         userService.delete(id);
         return "redirect:/admin/users";
+    }
+
+    @GetMapping("/logout")
+    public String logout() {
+        return "redirect:/login";
     }
 
     @ModelAttribute

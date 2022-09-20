@@ -43,7 +43,7 @@ public class UserServiceImp implements UserService {
     @Override
     @Transactional
     public void update(User user) {
-        save(user);
+        userDAO.save(user);
     }
 
     @Override

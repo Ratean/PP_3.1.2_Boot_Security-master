@@ -3,10 +3,8 @@ package ru.kata.spring.boot_security.demo.model;
 
 
 import lombok.Data;
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -14,7 +12,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Collection;
-import java.util.Objects;
 
 @Entity
 @Data
@@ -34,7 +31,6 @@ public class User implements UserDetails {
     private String surname;
 
     @NotEmpty(message = "Password should not be empty")
-    @Size(min = 3, message = "Min 3 characters")
     @Column(name = "password")
     private String password;
 

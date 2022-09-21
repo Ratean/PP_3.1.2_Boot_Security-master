@@ -44,9 +44,8 @@ public class AdminController {
         if (bindingResult.hasErrors()) {
             return "/new";
         }
-        List<Role> roles = getRoleList(roleName);
-        user.setRoles(roles);
-        userService.save(user);
+
+        userService.save(user, roleName);
         return "redirect:/admin/users";
     }
 
@@ -65,34 +64,9 @@ public class AdminController {
         if (bindingResult.hasErrors()) {
             return "/update";
         }
-        User oldUser = userService.getUser(user.getId());
 
-        if (roleName == null) {
-            user.setRoles(oldUser.getRoles());
-        } else {
-            List<Role> roles = getRoleList(roleName);
-            user.setRoles(roles);
-        }
-
-        if (user.getPassword().equals("*******")) {
-            user.setPassword(oldUser.getPassword());
-            userService.update(user);
-        } else {
-            userService.save(user);
-        }
-
+        userService.update(user, roleName);
         return "redirect:/admin/users";
-    }
-
-    private List<Role> getRoleList(String roleName) {
-        String[] rolesArr = roleName.split(",");
-
-        List<Role> roles = new ArrayList<>();
-
-        for (int i = 0; i < rolesArr.length; i++) {
-            roles.add(userService.getRoleByName(rolesArr[i]));
-        }
-        return roles;
     }
 
     @DeleteMapping("/{id}")

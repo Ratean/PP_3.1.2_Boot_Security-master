@@ -35,15 +35,32 @@ public class UserServiceImp implements UserService {
 
     @Override
     @Transactional
-    public void save(User user) {
+    public void save(User user, String roleName) {
+        if (roleName != null) {
+            user.setRoles(getRoleList(roleName));
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDAO.save(user);
     }
 
     @Override
     @Transactional
-    public void update(User user) {
-        userDAO.save(user);
+    public void update(User user, String roleName) {
+        User oldUser = getUser(user.getId());
+
+        if (roleName == null) {
+            user.setRoles(oldUser.getRoles());
+        } else {
+            List<Role> roles = getRoleList(roleName);
+            user.setRoles(roles);
+        }
+
+        if (user.getPassword().equals("*******")) {
+            user.setPassword(oldUser.getPassword());
+            userDAO.save(user);
+        } else {
+            save(user, null);
+        }
     }
 
     @Override
@@ -71,7 +88,6 @@ public class UserServiceImp implements UserService {
 
     @Override
     public Role getRoleById(long roleId) {
-
         return roleDAO.getById(roleId);
     }
 
@@ -109,6 +125,17 @@ public class UserServiceImp implements UserService {
         if (otherUser != null) {
             admin.setId(otherUser.getId());
         }
-        save(admin);
+        save(admin, null);
+    }
+
+    private List<Role> getRoleList(String roleName) {
+        String[] rolesArr = roleName.split(",");
+
+        List<Role> roles = new ArrayList<>();
+
+        for (int i = 0; i < rolesArr.length; i++) {
+            roles.add(getRoleByName(rolesArr[i]));
+        }
+        return roles;
     }
 }
